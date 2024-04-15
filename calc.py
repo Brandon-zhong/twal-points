@@ -22,6 +22,10 @@ However, I am confident that we are
 We could add a check for transfers to the mb frame
 """
 
+# configurable 
+t_0 = datetime(year = 2024, month = 4, day = 1)
+t_1 = datetime(year = 2024, month = 4, day = 2)
+
 if __name__ == "__main__":
     # initialize v3-polars
     poolAddress = "0xbf7d01d6cddecb72c2369d1b421967098b10def7"
@@ -65,11 +69,19 @@ if __name__ == "__main__":
         # calculate time-weight
         .with_columns(twal=pl.col("block_timestamp").diff().dt.seconds())
         .filter(~pl.col("twal").is_null())
+        .filter(
+                (pl.col('block_timestamp') <= t_1.replace(tzinfo = timezone.utc))
+        )
     )
+
+    subset = tgt_swaps.filter(pl.col('block_timestamp') >= t_0.replace(tzinfo = timezone.utc))
+    
+    if subset.is_empty():
+        subset = tgt_swaps.tail(1)
 
     # main take swaps and mints/burns -> share at each swap block
     data = []
-    iterator = tgt_swaps.select(
+    iterator = subset.select(
         ["block_number", "transaction_index", "tick", "liquidity", "twal"]
     ).sort("block_number")
 
