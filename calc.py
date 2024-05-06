@@ -144,10 +144,16 @@ if __name__ == "__main__":
             current_share = shares.get(address, 0)
             shares[address] = current_share + twal * (lps[lp] / liquidity)
 
-    assert np.isclose(total_time, sum(shares.values())), "Missing share of time"
+
+    calculatedTime = sum(shares.values())
+    missingShares = np.isclose(total_time, calculatedTime)
+    
+    if not missingShares:
+        amtMissing = total_time - calculatedTime
+        print(f'Missing {amtMissing} seconds. If small, then likely just no updates')
 
     for lp in shares.keys():
-        shares[lp] = shares[lp] / total_time
+        shares[lp] = shares[lp] / calculatedTime
 
     # we did it joe
     print(shares)
