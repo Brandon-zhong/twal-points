@@ -57,5 +57,6 @@ if __name__ == "__main__":
     ).is_empty(), "Negative liquidity"
 
     # we know that all lps are positive and in-range
-    tracked_liquidity = 0
-    lp_dict = {}
+    print(lps)
+    lps.write_csv(f"lps_{as_of}.csv")
+    
