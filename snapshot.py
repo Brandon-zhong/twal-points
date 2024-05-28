@@ -69,13 +69,18 @@ def queryDataWithBlock(block=19907818, update=False):
     print(total_liquidity_delta)
     return
 
+def str_to_bool(s):
+    if s.lower() in ['true', '1', 't', 'y', 'yes']:
+        return True
+    else:
+        return False
 
 if __name__ == "__main__":
     # 解析单个参数
     if len(sys.argv) > 1:
-        block = sys.argv[1]
-        update = sys.argv[2]
-        print("Parameter :", block, update)
+        block = int(sys.argv[1])
+        update = str_to_bool(sys.argv[2])
+        print("Parameter :", block, type(block), update, type(update))
         queryDataWithBlock(block, update)
     else:
         print("No parameters provided.")
