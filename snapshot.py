@@ -52,21 +52,22 @@ def queryDataWithBlock(block=19907818, update=False):
     # TODO
     # this is possible if there was a transfer of liquidity
     # we could instead check via tokenID (which cannot change)
-    assert lps.filter(
-        pl.col("liquidity_delta") < 0
-    ).is_empty(), "Negative liquidity"
+    # assert lps.filter(
+    #     pl.col("liquidity_delta") < 0
+    # ).is_empty(), "Negative liquidity"
 
     # we know that all lps are positive and in-range
-    print(block, update,"================================================")
+    # print(block, update,"================================================")
     # print(lps) 
     # 初始化total
-    total_liquidity_delta = 0
+    # total_liquidity_delta = 0
     for row in lps.iter_rows(named=True):
         address = row['key'].split('-')[0]
         liquidity_delta = row['liquidity_delta']
-        total_liquidity_delta += liquidity_delta
-        print(address, liquidity_delta)
-    print(total_liquidity_delta)
+        # total_liquidity_delta += liquidity_delta
+        print("===",address, liquidity_delta)
+    # print(total_liquidity_delta)
+    # lps.write_csv(f"data/lps_{block}.csv")
     return
 
 def str_to_bool(s):
